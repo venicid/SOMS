@@ -6,7 +6,9 @@ OMS自动化运维平台
 
 一直想写个运维平台，无奈前端太差（虽然也不懂开发语言），所以没实现。。
 
-还好有不少人共享了各种各样的平台，其中就有OMS运维平台（binbin开源的OMS平台 链接：https://github.com/binbin91/oms ）  
+还好有不少人共享了各种各样的平台，其中就有OMS运维平台
+
+*binbin开源的OMS平台 链接：https://github.com/binbin91/oms*
 
 所以自己拿来捣鼓，根据自己的需求，也算是写了点东西出来
 
@@ -39,10 +41,17 @@ Passwd: Imjtest89~~
 ![](https://imaojia.com/media/pictures/2017/02/17/salt-host.png)
 
 命令执行  
-![](https://imaojia.com/media/pictures/2017/02/17/salt-command.png)
+![](https://imaojia.com/media/pictures/2018/10/12/remote-command.png)
+
+![](https://imaojia.com/media/pictures/2018/10/12/remote-command-group.png)
+
+![](https://imaojia.com/media/pictures/2018/10/12/remote-command-advance.png)
 
 模块部署  
-![](https://imaojia.com/media/pictures/2017/02/17/salt-deploy.png)
+![](https://imaojia.com/media/pictures/2018/10/12/remote-module.png)
+
+文件下载  
+![](https://imaojia.com/media/pictures/2018/10/12/remote-file-download.png)  
 
 文件上传
 ![](https://imaojia.com/media/pictures/2017/02/17/file-upload.png)
