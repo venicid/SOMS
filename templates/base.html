@@ -65,7 +65,7 @@
                                             </ul>
                                         </li>
                                         {% endif %}
-                                        <li><a href="{% url 'remote_exec' %}">远程命令</a></li>
+                                        <li><a href="{% url 'salt_remote' %}">远程命令</a></li>
                                         <li><a href="{% url 'module_deploy' %}">模块部署</a>
                                             <ul class="nav child_menu">
                                                 <li class="sub_menu" style="display: none"><a href="{% url 'module_list' %}">模块列表</a>
@@ -75,7 +75,7 @@
                                             </ul>
                                         </li>
                                         <li><a href="{% url 'advanced_manage' %}">高级管理</a></li>
-                                        <li><a href="{% url 'project_list' %}">项目管理</a></li>
+{#                                        <li><a href="{% url 'project_list' %}">项目管理</a></li>#}
                                     </ul>
                                     </li>
                                     {% endif %}
@@ -84,7 +84,7 @@
                                     <ul class="nav child_menu">
                                         <li><a href="{% url 'file_download' %}">文件下载</a></li>
                                         <li><a href="{% url 'file_manage' %}">文件上传</a></li>
-                                        <li><a href="{% url 'file_rollback' %}">文件回滚</a></li>
+{#                                        <li><a href="{% url 'file_rollback' %}">文件回滚</a></li>#}
                                     </ul>
                                     </li>
                                     {% endif %}

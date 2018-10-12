@@ -51,7 +51,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     确认是否删除？
-                                                    <div><br /><strong>{{ g.groupname }}</strong></p></div>
+                                                    <div><br /><strong>{{ g.nickname }}</strong></div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
@@ -80,8 +80,8 @@
                                                 {% for m in g|group_minions %}
                                                 <tr>
                                                     <td>{{ m.hostname }}</td>
-                                                    <td>{{ m.alive }}</td>
-                                                    <td>{{ m.status }}</td>
+                                                    <td>{% if m.alive %}在线{% else %}离线{% endif %}</td>
+                                                    <td>{% if m.status %}已授权{% else %}未授权{% endif %}</td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>

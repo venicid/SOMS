@@ -31,7 +31,7 @@ SECRET_KEY = '-&y%9+ecv27mcik%+lieo(tv%r!n6+l%t1dtr$&@zpuenj@knw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'soms.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'soms.db'),
 #        'ENGINE': 'django.db.backends.mysql',
 #        'NAME': 'somsdb',
 #        'HOST': 'localhost',

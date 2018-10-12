@@ -1,3 +1,8 @@
-Django==1.9
-MySQL-python
+Django==1.11
+#MySQL-python
 xlwt
+ruamel.yaml
+
+## debian ##
+# pyOpenSSL==16.2.0
+## end ##

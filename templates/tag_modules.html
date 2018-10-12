@@ -1,8 +1,8 @@
 {% if module_list %}
-<select name="module_list" class="form-control" required="required">
-    <option name="" value="" title="">请选择</option>
+<select name="module_list" class="selectpicker form-control" required="required" multiple data-live-search="true">
+{#    <option name="" value="" title="">请选择</option>#}
     {% for module in module_list %}
-    <option name="module" value="{{ module.pk }}" title="{{ module.remark }}">{{ module.name }}</option>
+    <option name="module" value="{{ module.pk }}">{{ module.name }}</option>
     {% endfor %}
 </select>
 {% else %}

@@ -23,7 +23,7 @@
                 /tmp/icinga.tar.bz2: ## 上传nrpe插件包到远程机器临时目录<br />
                 file:<br />
                 - managed<br />
-                - source: SALTSRC/icinga.tar.bz2 ## SALTSRC为固定格式<br />
+                - source: salt://{% templatetag openvariable %} pillar['SALTSRC'] {% templatetag closevariable %}/icinga.tar.bz2 ## salt://module/{% templatetag openvariable %} pillar['SALTSRC'] {% templatetag closevariable %}为固定格式<br />
                 - backup: minion<br />
                 cmd.run:<br />
                 - name: useradd icinga -s /sbin/nologin;tar jxvf /tmp/icinga.tar.bz2 -C /usr/local/ &amp;&amp; chown -R icinga:icinga /usr/local/icinga &amp;&amp; echo &quot;/usr/local/icinga/bin/nrpe -c /usr/local/icinga/etc/nrpe.cfg -d&quot; &gt;&gt; /etc/rc.local;/usr/local/icinga/bin/nrpe -c /usr/local/icinga/etc/nrpe.cfg -d &amp;&amp; rm -rf /tmp/icinga.tar.bz2 ## 具体执行的命令</p>

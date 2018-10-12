@@ -1,5 +1,10 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding:utf-8 -*- 
+# @Author: qitan
+# @Email: qqing_lai@hotmail.com
+# @Site: https://imaojia.com
+# @File: file_bakup.py
+# @Time: 18-2-2 下午1:40
 
 import os
 import shutil

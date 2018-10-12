@@ -14,5 +14,4 @@ urlpatterns = [
     url(r'^userauth/group/list/$', views.group_list, name='user_group_list'),
     url(r'^userauth/group/add/$', views.group_manage, name='user_group_add'),
     url(r'^userauth/group/edit/(?P<aid>\d+)/(?P<action>[\w-]+)/$', views.group_manage, name='user_group_manage'),
-    url(r'^userauth/get_groups/$', views.ajax_user_groups, name='ajax_user_groups'),
 ]

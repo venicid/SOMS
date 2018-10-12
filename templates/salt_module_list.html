@@ -54,7 +54,7 @@
                                 <tr>
                                     <td>{{ m.name }}</td>
                                     <td>{{ m.module }}</td>
-                                    <td>{{ m.user.first_name }}</td>
+                                    <td>{{ m.user}} {{ m.user.first_name }}</td>
                                     <td>{{ m.remark }}</td>
                                     <td>
                                     <fieldset {% if not request.user.pk == m.user.pk and not request.user.is_superuser %}disabled{% endif %}>

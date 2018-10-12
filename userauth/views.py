@@ -22,7 +22,7 @@ from django.contrib.auth import (
     REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout
 )
 from django.utils.deprecation import (
-    RemovedInDjango20Warning, RemovedInDjango110Warning,
+    RemovedInDjango20Warning#, RemovedInDjango110Warning,
 )
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.cache import never_cache
@@ -247,9 +247,3 @@ def group_manage(request, aid=None, action=None):
     else:
         raise Http404
 
-@login_required
-def ajax_user_groups(request):
-    user_groups = {i['pk']: i['group_name'] for i in
-                   User.objects.get(pk=request.user.pk).group.values('pk', 'group_name')}
-
-    return HttpResponse(json.dumps(user_groups))

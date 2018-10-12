@@ -113,3 +113,14 @@
     filter:alpha(opacity=75);
     z-index:20140628;
 }
+
+.shell-result{
+    border: 1px solid #161616;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 5px;
+    color: #29dc33;
+    background: #161616;
+    max-height: 600px;
+    overflow-y: auto;
+}

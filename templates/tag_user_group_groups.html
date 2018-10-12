@@ -1,6 +1,9 @@
-<select name="tgt_select" class="form-control" required data-bv-notempty>
-    <option name="" value="">请选择</option>
-    {% for k,v in group_dict %}
-    <option name="group" value="{{ k }}">{{ v }}</option>
-    {% endfor %}
-</select>
+<div id="step-group" class="">
+        <select id="search_group" name="tgt_select[]" onchange="get_group_minion(this);" class="selectpicker show-tick form-control" data-live-search="true">
+{#        <option>请选择</option>#}
+                {% for k,v in group_dict %}
+                    <option name="group" value="{{ k }}">{{ v }}</option>
+                {% endfor %}
+        </select>
+</div>
+
