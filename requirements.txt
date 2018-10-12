@@ -1,4 +1,4 @@
-Django==1.11
+Django==1.11.15
 #MySQL-python
 xlwt
 ruamel.yaml
