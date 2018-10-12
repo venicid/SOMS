@@ -10,22 +10,28 @@
 
 from __future__ import unicode_literals
 
-#from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from userauth.models import User, UserGroup, Department
 from django.db import models
+from django.utils import timezone
+
+from deploy.storage import FileStorage
+from deploy.soms_lib import get_token
 
 
 def user_dir_path(instance, filename):
+    # if instance.visible == 0:
+    #    return 'salt/module/user_{user_id}/{filename}'.format(user_id=instance.user.id, filename=filename)
     if instance.visible == 0:
-        return 'salt/module/user_{user_id}/{filename}'.format(user_id=instance.user.id, filename=filename)
-    elif instance.visible == 2:
-        return 'salt/module/public/{filename}'.format(filename=filename)
-    else:
         return 'salt/module/group_{group_id}/{filename}'.format(group_id=instance.user_group.id, filename=filename)
+    else:
+        return 'salt/module/public/{filename}'.format(filename=filename)
+
 
 def file_upload_dir_path(instance, filename):
     return 'salt/fileupload/user_{user_id}/{file_tag}/{filename}'.format(
         user_id=instance.user.id, file_tag=instance.file_tag, filename=filename)
+
 
 # Create your models here.
 
@@ -74,7 +80,8 @@ class SaltGroup(models.Model):
         related_name='salt_host_set',
         verbose_name=u'Salt主机')
     user_group = models.ManyToManyField(UserGroup, related_name='group_usergroup_set', verbose_name=u'所属用户组')
-    department = models.ManyToManyField(Department, blank=True, related_name='saltgroup_department_set', verbose_name=u'所属部门')
+    department = models.ManyToManyField(Department, blank=True, related_name='saltgroup_department_set',
+                                        verbose_name=u'所属部门')
 
     def __str__(self):
         return self.nickname
@@ -88,17 +95,30 @@ class SaltGroup(models.Model):
         verbose_name_plural = u'Salt分组管理'
 
 
+class ModuleAttchment(models.Model):
+    attchment = models.FileField(upload_to='salt/module/{}'.format(get_token(80)), null=True, blank=True,
+                                 verbose_name=u'模块上传', storage=FileStorage())
+    upload_time = models.DateTimeField(default=timezone.now, verbose_name=u'上传时间')
+
+    def __unicode__(self):
+        return self.attchment.name
+
+    class Meta:
+        default_permissions = ()
+
+
 class ModuleUpload(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=50, unique=True, verbose_name=u'模块名称')
-    module = models.CharField(max_length=50, unique=True, verbose_name=u'调用模块')
-    upload_path = models.FileField(
-        upload_to=user_dir_path,
-        blank=True,
-        verbose_name=u'模块上传')
+    module = models.CharField(max_length=50, verbose_name=u'调用模块')
+    module_path = models.CharField(max_length=255, null=True, blank=True, verbose_name=u'模块路径')
+    attchment = models.ManyToManyField(ModuleAttchment, related_name='module_attchment', verbose_name=u'模块上传')
+    # {0:公共，1：相应用户组}
     visible = models.IntegerField(default=0, blank=True, null=True, verbose_name=u'可见等级')
-    user_group = models.ForeignKey(UserGroup, default=None, blank=True, null=True, related_name='module_usergroup_set', verbose_name=u'所属用户组')
-    department = models.IntegerField(default=0, verbose_name=u'所属部门')
+    user_group = models.ManyToManyField(UserGroup, blank=True, null=True, related_name='module_usergroup_set',
+                                        verbose_name=u'所属用户组')
+    created_time = models.DateTimeField(default=timezone.now, verbose_name=u'创建时间')
+    modify_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     remark = models.CharField(max_length=255, blank=True, verbose_name=u'备注')
 
     def __str__(self):
@@ -137,7 +157,8 @@ class FileUpload(models.Model):
             ("edit_filedownload", u"管理文件下载"),
         )
         verbose_name = u'文件上传'
-        verbose_name = u'文件上传管理'
+        verbose_name_plural = u'文件上传管理'
+
 
 class FileRollback(models.Model):
     user = models.ForeignKey(User)
@@ -158,7 +179,8 @@ class FileRollback(models.Model):
         default_permissions = ()
         ordering = ['-id']
         verbose_name = u'文件备份'
-        verbose_name = u'文件备份管理'
+        verbose_name_plural = u'文件备份管理'
+
 
 class Project(models.Model):
     user = models.ForeignKey(User)
@@ -186,6 +208,7 @@ class Project(models.Model):
         ordering = ['-id']
         verbose_name = u'项目'
         verbose_name_plural = u'项目管理'
+
 
 class ProjectRollback(models.Model):
     name = models.ForeignKey(Project)
