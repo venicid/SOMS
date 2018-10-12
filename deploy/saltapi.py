@@ -8,7 +8,11 @@
 @desc:
 '''
 
+import ssl
 import urllib2,urllib
+
+#ssl._create_default_https_context = ssl._create_unverified_context
+context = ssl._create_unverified_context()
 
 try:
     import json
@@ -28,7 +32,7 @@ class SaltAPI(object):
         encode = urllib.urlencode(params)
         obj = urllib.unquote(encode)
         content = self.postRequest(obj,prefix='/login')
-	try:
+        try:
             self.__token_id = content['return'][0]['token']
         except KeyError:
             raise KeyError
@@ -37,7 +41,15 @@ class SaltAPI(object):
         url = self.__url + prefix
         headers = {'X-Auth-Token'   : self.__token_id}
         req = urllib2.Request(url, obj, headers)
-        opener = urllib2.urlopen(req)
+        opener = urllib2.urlopen(req, context=context)
+        content = json.loads(opener.read())
+        return content
+
+    def getRequest(self,prefix='/'):
+        url = self.__url + prefix
+        headers = {'X-Auth-Token'   : self.__token_id}
+        req = urllib2.Request(url, headers=headers)
+        opener = urllib2.urlopen(req, context=context)
         content = json.loads(opener.read())
         return content
 
@@ -84,11 +96,12 @@ class SaltAPI(object):
         '''
 
         params = {'client':'runner', 'fun':'jobs.lookup_jid', 'jid': jid}
+        params = {}
         obj = urllib.urlencode(params)
         self.token_id()
-        content = self.postRequest(obj)
-        ret = content['return'][0]
-        return ret
+        content = self.getRequest(prefix='/jobs/{}'.format(jid))
+        #ret = content['info'][0]['Result']
+        return content
 
     def salt_running_jobs(self):
         '''
@@ -104,11 +117,27 @@ class SaltAPI(object):
 
     def remote_execution(self,tgt,fun,arg,expr_form):
         '''
-        异步执行远程命令、部署模块
+        异步执行远程命令
         '''
 
         params = {'client': 'local_async', 'tgt': tgt, 'fun': fun, 'arg': arg, 'expr_form': expr_form}
         obj = urllib.urlencode(params)
+        self.token_id()
+        content = self.postRequest(obj)
+        jid = content['return'][0]['jid']
+        return jid
+
+    def remote_module(self,tgt,fun,arg,kwarg,expr_form):
+        '''
+        异步部署模块
+        '''
+
+        params = {'client': 'local_async', 'tgt': tgt, 'fun': fun, 'arg': arg, 'expr_form': expr_form}
+        #kwarg = {'SALTSRC': 'PET'}
+        params2 = {'arg':'pillar={}'.format(kwarg)}
+        arg_add = urllib.urlencode(params2)
+        obj = urllib.urlencode(params)
+        obj = obj + '&' + arg_add
         self.token_id()
         content = self.postRequest(obj)
         jid = content['return'][0]['jid']
