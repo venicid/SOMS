@@ -65,8 +65,7 @@ def get_server_asset_info(request):
                     action = request.get_full_path().split('=')[1]
                     if action == 'flush':
                         q = SaltHost.objects.filter(alive=True)
-                        tgt_list = []
-                        [tgt_list.append(i.hostname) for i in q]
+                        tgt_list = [i.hostname for i in q]
                         ret = MultipleCollect(tgt_list)
                         for i in ret:
                             try:

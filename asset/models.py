@@ -17,7 +17,7 @@ from django.core.validators import RegexValidator
 # Create your models here.
 class ServerAsset(models.Model):
     nodename = models.CharField(max_length=50, unique=True, default=None, verbose_name=u'Salt主机')
-    hostname = models.CharField(max_length=50, unique=True, verbose_name=u'主机名')
+    hostname = models.CharField(max_length=50, verbose_name=u'主机名')
     manufacturer = models.CharField(max_length=20, blank=True, verbose_name=u'厂商')
     productname = models.CharField(max_length=100, blank=True, verbose_name=u'型号')
     sn = models.CharField(max_length=20, blank=True, verbose_name=u'序列号')
