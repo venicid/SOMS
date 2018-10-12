@@ -12,19 +12,24 @@ from django import forms
 from .models import *
 
 VISIBLE_CHOICES = (
-        (0, u"私有"),
+        #(0, u"私有"),
+        (0, u"公开"),
         (1, u"属组"),
-        (2, u"公开"),
     )
+
+class AttchmentForm(forms.ModelForm):
+    class Meta:
+        model = ModuleAttchment
+        fields = ('attchment', )
 
 class ModuleForm(forms.ModelForm):
     class Meta:
         model = ModuleUpload
-        fields = ('name', 'module', 'upload_path', 'visible', 'remark')
+        fields = ('name', 'module', 'attchment', 'visible', 'remark')
         widgets = {
           'name': forms.TextInput(attrs={'class': 'form-control'}),
           'module': forms.TextInput(attrs={'class': 'form-control'}),
-          'upload_path': forms.FileInput(),
+          'attchment': forms.FileInput(),
           'visible': forms.RadioSelect(choices=VISIBLE_CHOICES, attrs={'class': 'flat'}),
           'remark': forms.TextInput(attrs={'class': 'form-control'})
         }
