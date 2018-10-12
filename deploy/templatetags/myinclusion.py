@@ -90,10 +90,10 @@ def show_user_group_groups(pk, user_type):
     '''
     group_dict = {}
     if user_type:
-        group_dict = {i['groupname']:i['nickname'] for i in SaltGroup.objects.values('groupname', 'nickname')}
+        group_dict = {i['id']:i['nickname'] for i in SaltGroup.objects.values('id', 'nickname')}
     else:
-        group_dict = {i['groupname']:i['nickname'] for g in User.objects.get(pk=pk).group.all()
-                      for i in SaltGroup.objects.filter(user_group=g).values('groupname', 'nickname')}
+        group_dict = {i['id']:i['nickname'] for g in User.objects.get(pk=pk).group.all()
+                      for i in SaltGroup.objects.filter(user_group=g).values('id', 'nickname')}
 
     return {'group_dict':sorted(list(set(group_dict.items())))}
 

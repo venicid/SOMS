@@ -147,3 +147,10 @@ def show_item(value, arg):
     else:
         return ''
 
+@register.filter(name='module_split')
+def show_module(value, arg):
+    if value:
+        return value.split(arg)[:1]
+    else:
+        return None
+
