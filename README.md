@@ -54,7 +54,7 @@ Passwd: Imjtest89~~
 ![](https://imaojia.com/media/pictures/2018/10/12/remote-file-download.png)  
 
 文件上传
-![](https://imaojia.com/media/pictures/2017/02/17/file-upload.png)
+![](https://imaojia.com/media/pictures/2018/10/13/remote-file-upload.png)
 
 用户管理  
 ![soms-user](https://imaojia.com/media/pictures/2017/02/17/soms-user.png)
