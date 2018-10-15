@@ -37,10 +37,43 @@ from models import User, UserGroup
 from deploy.models import SaltGroup
 from userperm.views import UserIP
 from userperm.models import Message
+from soms.settings import BASE_DIR
 
 import json
+import pyotp
+from qrcode import QRCode, constants
+import os
 
 from .forms import *
+
+
+def get_qrcode(skey, username, uid):
+    filepath = os.path.join(BASE_DIR, 'media/qrcode/{}/'.format(uid))
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+    data = pyotp.totp.TOTP(skey).provisioning_uri(username, issuer_name=u'SOMS')
+    qr = QRCode(
+        version=1,
+        error_correction=constants.ERROR_CORRECT_L,
+        box_size=6,
+        border=4
+    )
+    try:
+        qr.add_data(data)
+        qr.make(fit=True)
+        img = qr.make_image()
+        img.save(filepath + username + '.png')
+        return True
+    except Exception, e:
+        print e
+        return False
+
+
+def soms_mfa(skey, verify_code):
+    t = pyotp.TOTP(skey)
+    result = t.verify(verify_code)
+
+    return result
 
 
 def deprecate_current_app(func):
@@ -65,7 +98,26 @@ def deprecate_current_app(func):
 
 @login_required
 def index(request):
+    user = request.user
+    skey = ''
+
+    if request.method == 'POST':
+        skey = request.POST.get('security_key', None)
+        user.mfa = skey
+        user.save()
+        return redirect('logout')
+    if not user.mfa:
+        skey = pyotp.random_base32(32)
+        get_qrcode(skey, user.username, user.pk)
+    return render(request, 'index.html', {'security_key': skey})
+
+@login_required
+def soms_help(request):
     return render(request, 'soms_help.html', {})
+
+@login_required
+def soms_about(request):
+    return render(request, 'soms_about.html', {})
 
 @deprecate_current_app
 @sensitive_post_parameters()
@@ -74,24 +126,33 @@ def index(request):
 def login(request, redirect_field_name=REDIRECT_FIELD_NAME, authentication_form=AuthenticationForm):
     redirect_to = request.POST.get(redirect_field_name,
                                    request.GET.get(redirect_field_name, ''))
+    verify_err = ''
     if request.method == "POST":
         if request.POST.has_key('login'):
             form = authentication_form(request, data=request.POST)
             if form.is_valid():
+                verify_code = request.POST.get('verify_code')
                 if form.get_user() and form.get_user().is_active:
-                    # Ensure the user-originating redirection url is safe.
-                    if not is_safe_url(url=redirect_to, host=request.get_host()):
-                        redirect_to = resolve_url(djsettings.LOGIN_REDIRECT_URL)
-                    auth_login(request, form.get_user())
-                    Message.objects.create(type=u'用户登录', user=request.user, action=u'用户登录',
-                                           action_ip=UserIP(request), content='用户登录 %s'%request.user)
-                    return HttpResponseRedirect(redirect_to)
+                    if form.get_user().mfa:
+                        result = soms_mfa(form.get_user().mfa, str(verify_code))
+                    else:
+                        result = True
+                    if not result:
+                        verify_err = u'验证码错误'
+                    else:
+                        # Ensure the user-originating redirection url is safe.
+                        if not is_safe_url(url=redirect_to, host=request.get_host()):
+                            redirect_to = resolve_url(djsettings.LOGIN_REDIRECT_URL)
+                        auth_login(request, form.get_user())
+                        Message.objects.create(type=u'用户登录', user=request.user, action=u'用户登录',
+                                               action_ip=UserIP(request), content='用户登录 %s'%request.user)
+                        return HttpResponseRedirect(redirect_to)
             else:
                 Message.objects.create(type=u'用户登录', user=request.POST.get('username'), action=u'用户登录',
                                        action_ip=UserIP(request), content=u'用户登录失败 %s'%request.POST.get('username'))
     else:
         form = authentication_form(request)
-    return render(request, 'registration/login.html', {'form':form, 'title':'用户登录'})
+    return render(request, 'registration/login.html', {'form': form, 'verify_err': verify_err, 'title': '用户登录'})
 
 @deprecate_current_app
 def logout(request, next_page=None, redirect_field_name=REDIRECT_FIELD_NAME):

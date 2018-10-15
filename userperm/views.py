@@ -11,6 +11,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from django.views.static import serve
+
 from .models import *
 from .forms import *
 
@@ -157,3 +159,15 @@ def audit_log(request):
         return render(request, 'userperm_log_audit.html', {'all_logs': logs})
     else:
         raise Http404
+
+
+@login_required
+def protected_serve(request, path, document_root=None):
+    temp = path.split('/')
+    if request.user.pk == int(temp[1]):
+        return serve(request, path, document_root)
+    else:
+        # return HttpResponse("无权限查看！")
+        raise Http404
+
+

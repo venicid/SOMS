@@ -21,6 +21,7 @@ from django.conf.urls import include, url
 from deploy import views as dviews
 from userperm import views as uviews
 from asset import views as aviews
+from soms import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -53,7 +54,7 @@ urlpatterns = [
     url(r'^deploy/advanced_manage/$', dviews.salt_advanced_manage, name='advanced_manage'),
     url(r'^deploy/remote_exec/check_result/$', dviews.salt_ajax_result, name='ajax_result'),
     url(r'^deploy/module_deploy/$', dviews.salt_module_deploy, name='module_deploy'),
-    url(r'^/deploy/module/upload/$', dviews.UploadFile.as_view(), name='file_upload'),
+    url(r'^deploy/module/upload/$', dviews.UploadFile.as_view(), name='file_upload'),
     url(r'^deploy/module_deploy/deploy/$', dviews.salt_ajax_module_deploy, name='ajax_deploy'),
     url(r'^deploy/file_manage/download/$', dviews.salt_file_download, name='file_download'),
     url(r'^deploy/file_manage/upload/$', dviews.salt_file_upload, name='file_manage'),
@@ -76,4 +77,5 @@ urlpatterns = [
     url(r'^asset/idc/add/$', aviews.idc_asset_manage, name='idc_add'),
     url(r'^asset/idc/edit/(?P<aid>\d+)/(?P<action>[\w-]+)/$', aviews.idc_asset_manage, name='idc_manage'),
     url(r'^asset/load_city/$', aviews.geo_input, name='load_city'),
+    url(r'^{}(?P<path>.*)$'.format(settings.MEDIA_URL[1:]), uviews.protected_serve, {'document_root': settings.MEDIA_ROOT}),
 ]

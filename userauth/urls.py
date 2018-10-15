@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^help/$', views.soms_help, name='help'),
+    url(r'^about/$', views.soms_about, name='about'),
     url(r'^accounts/login/$', views.login, name='login'),
     url(r'^accounts/logout/$', views.logout, {'next_page': '/'}, name='logout'),
     #url(r'^accounts/login/$', djviews.login, name='login'),
