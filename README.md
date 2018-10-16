@@ -31,11 +31,11 @@ OMS自动化运维平台
 https://github.com/puikinsh/gentelella
 
 
-~~SOMS演示地址：
-http://soms.imaojia.com:8080/~~
+SOMS演示地址：
+https://soms.imaojia.com
 
-~~User: somsadmin
-Passwd: Imjtest89~~
+User: admin
+Passwd: soms123
 
 主机管理  
 ![](https://imaojia.com/media/pictures/2017/02/17/salt-host.png)
