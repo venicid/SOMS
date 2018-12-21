@@ -8,15 +8,11 @@
 @desc:
 '''
 
-import sys
+import ssl
 import urllib2, urllib
 
-if sys.version_info < (2, 7, 9):
-    context = None
-else:
-    import ssl
-    #ssl._create_default_https_context = ssl._create_unverified_context
-    context = ssl._create_unverified_context()
+# ssl._create_default_https_context = ssl._create_unverified_context
+context = ssl._create_unverified_context()
 
 try:
     import json
