@@ -12,7 +12,12 @@ import ssl
 import urllib
 from urllib import request
 from urllib import parse
+# python3
 import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 context = ssl._create_unverified_context()
@@ -21,6 +26,9 @@ try:
     import json
 except ImportError:
     import simplejson as json
+
+import requests
+
 
 class SaltAPI(object):
     __token_id = ''
@@ -43,22 +51,52 @@ class SaltAPI(object):
         self.headers['X-Auth-Token'] = self.__token
         res = requests.post(url=self.url, headers=self.headers, verify=False, **kwargs)
         print(res.json())
-        return res.json()
+        return res.json()['return'][0] if res.json().get('return') else ''
+
+    def remote_execution(self,tgt,fun,arg,tgt_type='glob'):
+        '''
+        异步执行远程命令
+        '''
+        params = {"client": "local_async", "tgt": tgt, "fun": fun, "arg": arg, "tgt_type": tgt_type}
+        print(params)
+        ret = self.__post(json=params)
+        print(ret)
+        return ret.get('jid')
+
+
+    def getRequest(self,prefix='/'):
+        url = self.url + prefix
+        headers = {'X-Auth-Token'   : self.__token_id}
+        req = urllib.request.Request(url, headers=headers)
+        opener = urllib.request.urlopen(req, context=context)
+        content = json.loads(opener.read())
+        return content
+
+    def postRequest(self,obj,prefix='/'):
+        url = self.url + prefix
+        headers = {'X-Auth-Token': self.__token_id}
+        req = urllib.request.Request(url, obj, headers)
+        opener = urllib.request.urlopen(req, context=context)
+        content = json.loads(opener.read())
+        return content
+
 
 
     def list_all_key(self):
         '''
         获取包括认证、未认证salt主机
         '''
-        print(1111111111111111)
-        params = {'client': 'wheel', 'fun': 'key.list_all'}
-        content = self.__post(json=params)
-        print(2222222222222222)
-        print(content)
-        minions = content['return'][0]['data']['return']['minions']
-        minions_pre = content['return'][0]['data']['return']['minions_pre']
 
-        return minions, minions_pre
+        params = {'client': 'wheel', 'fun': 'key.list_all'}
+        # obj = urllib.parse.urlencode(params)
+        content = self.__post(json=params)
+
+
+        minions = content['data']['return']['minions']
+        minions_pre = content['data']['return']['minions_pre']
+        print(minions,minions_pre)
+        return minions,minions_pre
+
 
     def delete_key(self,node_name):
         '''
@@ -78,7 +116,6 @@ class SaltAPI(object):
 
         params = {'client': 'wheel', 'fun': 'key.accept', 'match': node_name}
         obj = urllib.parse.urlencode(params)
-        self.token_id()
         content = self.postRequest(obj)
         ret = content['return'][0]['data']['success']
         return ret
@@ -87,14 +124,13 @@ class SaltAPI(object):
         '''
         通过jid获取执行结果
         '''
-
         params = {'client':'runner', 'fun':'jobs.lookup_jid', 'jid': jid}
-        params = {}
-        obj = urllib.parse.urlencode(params)
-        self.token_id()
-        content = self.getRequest(prefix='/jobs/{}'.format(jid))
-        #ret = content['info'][0]['Result']
-        return content
+        print(params)
+        res = requests.get(url=self.url+'jobs/'+jid, headers=self.headers, verify=False, json=params)
+        print(res)
+        return res.json()
+
+
 
     def salt_running_jobs(self):
         '''
@@ -103,123 +139,10 @@ class SaltAPI(object):
 
         params = {'client':'runner', 'fun':'jobs.active'}
         obj = urllib.parse.urlencode(params)
-        self.token_id()
         content = self.postRequest(obj)
         ret = content['return'][0]
         return ret
 
-    def remote_execution(self,tgt,fun,arg,expr_form):
-        '''
-        异步执行远程命令
-        '''
-
-        params = {'client': 'local_async', 'tgt': tgt, 'fun': fun, 'arg': arg, 'expr_form': expr_form}
-        obj = urllib.parse.urlencode(params)
-        content = self.postRequest(obj)
-        jid = content['return'][0]['jid']
-        return jid
-
-    def remote_module(self,tgt,fun,arg,kwarg,expr_form):
-        '''
-        异步部署模块
-        '''
-
-        params = {'client': 'local_async', 'tgt': tgt, 'fun': fun, 'arg': arg, 'expr_form': expr_form}
-        #kwarg = {'SALTSRC': 'PET'}
-        params2 = {'arg':'pillar={}'.format(kwarg)}
-        arg_add = urllib.parse.urlencode(params2)
-        obj = urllib.parse.urlencode(params)
-        obj = obj + '&' + arg_add
-        self.token_id()
-        content = self.postRequest(obj)
-        jid = content['return'][0]['jid']
-        return jid
-
-    def remote_localexec(self,tgt,fun,arg,expr_form):
-        params = {'client': 'local', 'tgt': tgt, 'fun': fun, 'arg': arg, 'expr_form': expr_form}
-        obj = urllib.parse.urlencode(params)
-        self.token_id()
-        content = self.postRequest(obj)
-        ret = content['return'][0]
-        return ret
-
-    def salt_state(self,tgt,arg,expr_form):
-        '''
-        sls文件
-        '''
-        params = {'client': 'local', 'tgt': tgt, 'fun': 'state.sls', 'arg': arg, 'expr_form': expr_form}
-        obj = urllib.parse.urlencode(params)
-        self.token_id()
-        content = self.postRequest(obj)
-        ret = content['return'][0]
-        return ret
-
-    def project_manage(self,tgt,fun,arg1,arg2,arg3,arg4,arg5,expr_form):
-        '''
-        文件上传、备份到minion、项目管理
-        '''
-        params = {'client': 'local', 'tgt': tgt, 'fun': fun, 'arg': arg1, 'expr_form': expr_form}
-        # 拼接url参数
-        params2 = {'arg':arg2}
-        arg_add = urllib.parse.urlencode(params2)
-        obj = urllib.parse.urlencode(params)
-        obj = obj + '&' + arg_add
-        params3 = {'arg': arg3}
-        arg_add = urllib.parse.urlencode(params3)
-        obj = obj + '&' + arg_add
-        params4 = {'arg': arg4}
-        arg_add = urllib.parse.urlencode(params4)
-        obj = obj + '&' + arg_add
-        params5 = {'arg': arg5}
-        arg_add = urllib.parse.urlencode(params5)
-        obj = obj + '&' + arg_add
-        self.token_id()
-        content = self.postRequest(obj)
-        ret = content['return'][0]
-        return ret
-
-    def file_copy(self,tgt,fun,arg1,arg2,expr_form):
-        '''
-        文件上传、备份到minion、项目管理
-        '''
-        params = {'client': 'local', 'tgt': tgt, 'fun': fun, 'arg': arg1, 'expr_form': expr_form}
-        # 拼接url参数
-        params2 = {'arg':arg2}
-        arg_add = urllib.parse.urlencode(params2)
-        obj = urllib.parse.urlencode(params)
-        obj = obj + '&' + arg_add
-        self.token_id()
-        content = self.postRequest(obj)
-        ret = content['return'][0]
-        return ret
-
-    def file_bak(self,tgt,fun,arg,expr_form):
-        '''
-        文件备份到master
-        '''
-        params = {'client': 'local', 'tgt': tgt, 'fun': fun, 'arg': arg, 'expr_form': expr_form}
-        obj = urllib.parse.urlencode(params)
-        self.token_id()
-        content = self.postRequest(obj)
-        ret = content['return'][0]
-        return ret
-
-    def file_manage(self,tgt,fun,arg1,arg2,arg3,expr_form):
-        '''
-        文件回滚
-        '''
-        params = {'client': 'local', 'tgt': tgt, 'fun': fun, 'arg': arg1, 'expr_form': expr_form}
-        params2 = {'arg': arg2}
-        arg_add = urllib.parse.urlencode(params2)
-        obj = urllib.parse.urlencode(params)
-        obj = obj + '&' + arg_add
-        params3 = {'arg': arg3}
-        arg_add_2 = urllib.parse.urlencode(params3)
-        obj = obj + '&' + arg_add_2
-        self.token_id()
-        content = self.postRequest(obj)
-        ret = content['return'][0]
-        return ret
 
     def salt_alive(self,tgt):
         '''
@@ -227,10 +150,10 @@ class SaltAPI(object):
         '''
 
         params = {'client': 'local', 'tgt': tgt, 'fun': 'test.ping'}
-
         content = self.__post(json=params)
 
-        ret = content['return'][0]
+        
+        ret = content
         return ret
 
     def remote_server_info(self,tgt,fun):
@@ -240,13 +163,14 @@ class SaltAPI(object):
         params = {'client': 'local', 'tgt': tgt, 'fun': fun}
 
         obj = urllib.parse.urlencode(params)
-        self.token_id()
+
         content = self.postRequest(obj)
         ret = content['return'][0][tgt]
         return ret
 
 def main():
-    sapi = SaltAPI(url='https://192.168.194.140:8000',username='saltapi',password='saltapi')
+    sapi = SaltAPI()
 
 if __name__ == '__main__':
     main()
+

@@ -2,27 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1908881b-976a-42b3-b66d-5222c23f57ed" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/deploy/saltapiV1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SOMS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SOMS.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/asset_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/asset/asset_info.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/geo.py" beforeDir="false" afterPath="$PROJECT_DIR$/asset/geo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/asset/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/md5.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/md5.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/saltapiV2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploy/saltapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/saltapi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/templatetags/myuserauth.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/templatetags/myuserauth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/soms/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/soms/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/soms/settings_local.py" beforeDir="false" afterPath="$PROJECT_DIR$/soms/settings_local.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/salt_remote_exec.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/salt_remote_exec.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userauth/form.py" beforeDir="false" afterPath="$PROJECT_DIR$/userauth/form.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userauth/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/userauth/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userauth/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/userauth/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userperm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/userperm/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,61 +46,47 @@
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6439232">
-      <split-first>
-        <leaf>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/deploy/views.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="533" column="51" selection-start-line="533" selection-start-column="51" selection-end-line="533" selection-end-column="51" />
-                  <folding>
-                    <element signature="e#139#203#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/deploy/md5.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="661">
-                  <caret line="44" column="34" selection-start-line="44" selection-start-column="34" selection-end-line="44" selection-end-column="34" />
-                  <folding>
-                    <element signature="e#45#59#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/deploy/saltapi.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="562">
-                  <caret line="64" column="16" lean-forward="true" selection-start-line="64" selection-start-column="16" selection-end-line="64" selection-end-column="16" />
-                  <folding>
-                    <element signature="e#141#151#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/deploy/saltapiV1.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="682">
-                  <caret line="61" column="37" selection-start-line="61" selection-start-column="26" selection-end-line="61" selection-end-column="37" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/deploy/md5.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="713">
+              <caret line="44" column="34" selection-start-line="44" selection-start-column="34" selection-end-line="44" selection-end-column="34" />
+              <folding>
+                <element signature="e#45#59#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/deploy/saltapi.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="418">
+              <caret line="154" column="8" lean-forward="true" selection-start-line="154" selection-start-column="8" selection-end-line="154" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/deploy/saltapiV2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="308">
+              <caret line="18" lean-forward="true" selection-end-line="253" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/deploy/saltapiV1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="48" lean-forward="true" selection-end-line="173" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -232,12 +200,12 @@
       <workItem from="1567479397165" duration="16000" />
       <workItem from="1567566167647" duration="40748000" />
       <workItem from="1567996787692" duration="348000" />
-      <workItem from="1567997145048" duration="3254000" />
+      <workItem from="1567997145048" duration="4391000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58868000" />
+    <option name="totallyTimeSpent" value="60005000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -252,7 +220,7 @@
     <frame x="1912" y="-16" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.19246298" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.1924307" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -276,6 +244,31 @@
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" weight="0.32990935" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1924307" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32978722" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5006605" side_tool="true" weight="0.40425533" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.3299712" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="File Transfer" order="13" sideWeight="0.4993395" weight="0.26241136" />
+      <window_info anchor="bottom" id="Database Console" order="14" weight="0.3299712" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32990935" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -556,16 +549,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/deploy/md5.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="661">
-          <caret line="44" column="34" selection-start-line="44" selection-start-column="34" selection-end-line="44" selection-end-column="34" />
-          <folding>
-            <element signature="e#45#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/deploy/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -576,20 +559,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/deploy/md5.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="713">
+          <caret line="44" column="34" selection-start-line="44" selection-start-column="34" selection-end-line="44" selection-end-column="34" />
+          <folding>
+            <element signature="e#45#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/deploy/saltapiV2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="18" lean-forward="true" selection-end-line="253" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/deploy/saltapiV1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="682">
-          <caret line="61" column="37" selection-start-line="61" selection-start-column="26" selection-end-line="61" selection-end-column="37" />
+        <state relative-caret-position="396">
+          <caret line="48" lean-forward="true" selection-end-line="173" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/deploy/saltapi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="562">
-          <caret line="64" column="16" lean-forward="true" selection-start-line="64" selection-start-column="16" selection-end-line="64" selection-end-column="16" />
-          <folding>
-            <element signature="e#141#151#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="418">
+          <caret line="154" column="8" lean-forward="true" selection-start-line="154" selection-start-column="8" selection-end-line="154" selection-end-column="8" />
         </state>
       </provider>
     </entry>
