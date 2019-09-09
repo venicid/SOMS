@@ -24,7 +24,7 @@ def UserIP(request):
     '''
 
     ip = ''
-    if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
         ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
         ip = request.META['REMOTE_ADDR']
@@ -54,7 +54,7 @@ def user_command_manage(request, id=None):
             page_name = '新增命令'
 
         if request.method == 'GET':
-            if request.GET.has_key('delete'):
+            if 'delete' in request.GET:
                 id = request.GET.get('id')
                 command = get_object_or_404(UserCommand, pk=id)
                 command.delete()
@@ -110,7 +110,7 @@ def user_dir_manage(request, id=None):
             page_name = '新增目录'
 
         if request.method == 'GET':
-            if request.GET.has_key('delete'):
+            if 'delete' in request.GET:
                 id = request.GET.get('id')
                 directory = get_object_or_404(UserDirectory, pk=id)
                 directory.delete()
@@ -150,7 +150,7 @@ def audit_log(request):
         logs = Message.objects.all()[:300]
 
         if request.method == 'GET':
-            if request.GET.has_key('aid'):
+            if 'aid' in request.GET:
                 aid = request.get_full_path().split('=')[1]
                 log_detail = Message.objects.filter(id=aid)
                 return render(request, 'userperm_log_audit_detail.html',

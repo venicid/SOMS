@@ -24,8 +24,9 @@ from userperm.models import *
 from .models import *
 from .forms import *
 # custom function
-from tar_file import make_tar
-from md5 import md5sum
+from .tar_file import make_tar
+from .md5 import md5sum
+from functools import reduce
 
 try:
     import json
@@ -176,8 +177,7 @@ def RemoteExec(request, fun, group=False):
                 s = tgt_list.split(',')
                 s_len = len(s)
 
-            sapi = SaltAPI(url=settings.SALT_API['url'], username=settings.SALT_API['user'],
-                           password=settings.SALT_API['password'])
+            sapi = SaltAPI()
             try:
                 ## 远程命令
                 if fun == 'cmd.run':
@@ -257,8 +257,7 @@ def AjaxResult(jid, result_type, check_type):
     '''
 
     sret = {}
-    sapi = SaltAPI(url=settings.SALT_API['url'], username=settings.SALT_API['user'],
-                   password=settings.SALT_API['password'])
+    sapi = SaltAPI()
     rtype = '远程命令'
     result = ''
     t = 0
@@ -331,9 +330,13 @@ def salt_key_import(request):
     导入salt主机
     '''
     if request.user.is_superuser:
-        sapi = SaltAPI(url=settings.SALT_API['url'], username=settings.SALT_API['user'],
-                       password=settings.SALT_API['password'])
+
+        sapi = SaltAPI()
+
         minions, minions_pre = sapi.list_all_key()
+
+
+
         alive = False
         ret_alive = sapi.salt_alive('*')
         for node_name in minions:
@@ -357,7 +360,7 @@ def salt_key_import(request):
             try:
                 SaltHost.objects.get_or_create(hostname=node_name, alive=alive, status=False)
             except:
-                print 'not create'
+                print('not create')
 
         return redirect('key_list')
     else:
@@ -376,22 +379,22 @@ def salt_key_manage(request, hostname=None):
             hostname = request.GET.get('hostname')
             salthost = SaltHost.objects.get(hostname=hostname)
             action = ''
-
-            if request.GET.has_key('add'):
+            print(request.GET)
+            if 'add' in request.GET:
                 ret = sapi.accept_key(hostname)
                 if ret:
                     salthost.status = True
                     salthost.save()
                     result = 3
                     action = u'添加主机'
-            if request.GET.has_key('delete'):
+            if 'delete' in request.GET:
                 ret = sapi.delete_key(hostname)
                 if ret:
                     salthost.status = False
                     salthost.save()
                     result = 2
                     action = u'删除主机'
-            if request.GET.has_key('flush') and request.is_ajax():
+            if 'flush'in request.GET and request.is_ajax():
                 # result: 0 在线 | 1 离线
                 result = {'retcode': 1}
                 ret = sapi.salt_alive(hostname)
@@ -451,7 +454,7 @@ def salt_group_manage(request, id=None):
             page_name = '新增分组'
 
         if request.method == 'GET':
-            if request.GET.has_key('delete'):
+            if 'delete' in request.GET:
                 id = request.GET.get('id')
                 group = get_object_or_404(SaltGroup, pk=id)
                 group.delete()
@@ -484,8 +487,8 @@ def salt_group_manage(request, id=None):
 
             try:
                 group.save()
-            except Exception, e:
-                print e
+            except Exception as e:
+                print (e)
                 return JsonResponse({'retcode': 1, 'msg': str(e)})
 
             group.minions.clear()
@@ -568,7 +571,7 @@ def salt_module_manage(request, id=None):
             page_name = '新增模块'
 
         if request.method == 'GET':
-            if request.GET.has_key('delete'):
+            if 'delete' in request.GET:
                 id = request.GET.get('id')
                 module = get_object_or_404(ModuleUpload, pk=id)
                 if request.user.pk != module.user.pk and not request.user.is_superuser:
@@ -637,8 +640,11 @@ def salt_group_minions(request):
     if request.user.has_perms(['deploy.view_deploy']):
         if request.method == 'POST' and request.is_ajax:
             gid = request.POST.get('gid', None)
+
             minions = SaltGroup.objects.get(pk=gid).minions.all()
+
             ret = {i.hostname: i.alive for i in minions}
+
             return JsonResponse(ret)
     else:
         raise Http404
@@ -688,8 +694,7 @@ def salt_remote_exec(request):
         else:
             expr_form = 'nodegroup'
             tgt_select = SaltGroup.objects.get(pk=tgt_select).groupname
-        sapi = SaltAPI(url=settings.SALT_API['url'], username=settings.SALT_API['user'],
-                       password=settings.SALT_API['password'])
+        sapi = SaltAPI()
         jid = sapi.remote_execution(tgt_select, 'cmd.run', arg, expr_form)
         rst_source = sapi.salt_runner(jid)
         rst = rst_source['info'][0]['Result']
@@ -730,8 +735,7 @@ def salt_ajax_module_deploy(request):
             expr_form = 'nodegroup'
             tgt_select = SaltGroup.objects.get(pk=tgt_select).groupname
 
-        sapi = SaltAPI(url=settings.SALT_API['url'], username=settings.SALT_API['user'],
-                       password=settings.SALT_API['password'])
+        sapi = SaltAPI()
         module = ModuleUpload.objects.filter(pk=arg[0])[0]
         src = '/'.join(module.module.split('.')[:-1])
         jid = sapi.remote_module(tgt_select, 'state.sls', 'module.{}.{}'.format(module.module_path, module.module),
@@ -753,12 +757,11 @@ def salt_advanced_manage(request):
         if request.method == 'POST':
             if request.user.has_perms(['deploy.view_deploy', 'deploy.edit_deploy']):
                 if request.is_ajax():
-                    sapi = SaltAPI(url=settings.SALT_API['url'], username=settings.SALT_API['user'],
-                                   password=settings.SALT_API['password'])
+                    sapi = SaltAPI()
 
                     targets = request.POST
                     for i in range(0, int(targets['level']) + 1):
-                        retcode = 0
+                        retcode = 4
                         success = True
                         args = targets[str(i) + "[command]"]
                         check = targets[str(i) + "[check]"]
@@ -1071,7 +1074,7 @@ def salt_task_list(request):
     '''
     if request.user.has_perm('userperm.view_message'):
         if request.method == 'GET':
-            if request.GET.has_key('tid'):
+            if 'tid' in request.GET:
                 tid = request.get_full_path().split('=')[1]
                 log_detail = Message.objects.filter(user=request.user.first_name).filter(id=tid).exclude(
                     type=u'用户登录').exclude(type=u'用户退出')
@@ -1117,7 +1120,7 @@ def salt_task_running(request):
                     dict['tgt_pid'] = str_tgt
                     ret.append(dict)
                 return HttpResponse(json.dumps(ret))
-    if request.GET.has_key('delete'):
+    if 'delete' in request.GET:
         jid = request.GET.get('jid')
         import subprocess
         p = subprocess.Popen("salt '*' saltutil.term_job %s" % jid, shell=True, stdout=subprocess.PIPE)
@@ -1170,7 +1173,7 @@ def project_manage(request, id=None):
             page_name = '新增项目'
 
         if request.method == 'GET':
-            if request.GET.has_key('delete'):
+            if 'delete' in request.GET:
                 id = request.GET.get('id')
                 project = get_object_or_404(Project, pk=id)
                 project.delete()
@@ -1230,7 +1233,7 @@ def project_deploy(request):
                     pass
                 if tgt_list == '0':
                     ret = {u'发布异常': {'result': u'请确认是否配置测试/正式环境'}}
-                    if request.GET.has_key('get_rollback'):
+                    if 'get_rollback' in request.GET:
                         ret = {'-1': u'请确认是否配置测试/正式环境'}
                     return HttpResponse(json.dumps(ret))
                 expr_form = 'nodegroup'
@@ -1241,13 +1244,13 @@ def project_deploy(request):
                 dtime = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                 ret = sapi.file_copy(tgt_list, 'cp.get_file', 'salt://rsync/%s.list' % project.name,
                                      '/srv/salt/%s.list' % project.name, 'nodegroup')
-                if request.GET.has_key('init'):
+                if 'init' in request.GET:
                     action = u'初始化项目'
                     ret = sapi.project_manage(tgt_list, 'project_manage.ProjectSync', project.name,
                                               '%s//%s:%s@%s' % (url[0], project.src_user, project.src_passwd, url[1]),
                                               project.path, 'init', dtime, expr_form)
 
-                if request.GET.has_key('update'):
+                if 'update' in request.GET:
                     action = u'更新项目'
                     try:
                         ret = sapi.project_manage(tgt_list, 'project_manage.ProjectSync', project.name,
@@ -1261,14 +1264,14 @@ def project_deploy(request):
                     except:
                         ret = {u'更新异常': {'result': u'更新失败，检查项目是否发布'}}
 
-                if request.GET.has_key('get_rollback'):
+                if 'get_rollback' in request.GET:
                     action = u'获取备份'
                     ret = {i['pk']: i['tag'] for i in
                            ProjectRollback.objects.filter(name=id).filter(env=env).values('pk', 'tag')}
                     if not ret:
                         ret = {'0': 'No backup found.'}
 
-                if request.GET.has_key('rollback_delete'):
+                if 'rollback_delete' in request.GET:
                     action = u'删除备份'
                     tag = request.GET.get('tag')
                     enforce = request.GET.get('enforce')
@@ -1279,13 +1282,13 @@ def project_deploy(request):
                             ProjectRollback.objects.get(name=project, tag=tag, env=env).delete()
                             break
 
-                if request.GET.has_key('rollback'):
+                if 'rollback' in request.GET:
                     action = u'回滚项目'
                     tag = request.GET.get('tag')
                     ret = sapi.project_manage(tgt_list, 'project_manage.ProjectRollback', project.name, tag,
                                               project.path, 'rollback', dtime, expr_form)
 
-                if request.GET.has_key('start'):
+                if 'start' in request.GET:
                     action = u'启动进程'
                     tag = request.GET.get('tag')
                     if tag:
@@ -1293,7 +1296,7 @@ def project_deploy(request):
                     else:
                         ret = {u'进程管理': {'result': u'未配置启动项'}}
 
-                if request.GET.has_key('reload'):
+                if 'reload' in request.GET:
                     action = u'重启进程'
                     tag = request.GET.get('tag')
                     if tag:
@@ -1301,7 +1304,7 @@ def project_deploy(request):
                     else:
                         ret = {u'进程管理': {'result': u'未配置重启项'}}
 
-                if request.GET.has_key('stop'):
+                if 'stop' in request.GET:
                     action = u'停止进程'
                     tag = request.GET.get('tag')
                     if tag:

@@ -62,7 +62,6 @@ def show_users(aid, value):
     elif aid and value=='department':
         # aid here is department name
         select_users_dict = {i['pk']:i['first_name'] for i in Department.objects.get(pk=aid).user_set.values('pk', 'first_name')}
-    print select_users_dict
     for i in select_users_dict:
         if i in users_dict:
             del users_dict[i]
@@ -186,7 +185,6 @@ def show_group_departments(aid):
 
     if aid:
         select_departments_dict = {i['pk']: i['name'] for i in Group.objects.get(pk=aid).department_group_set.values('pk', 'name')}
-    print select_departments_dict
     for i in select_departments_dict:
         if i in departments:
             del departments[i]

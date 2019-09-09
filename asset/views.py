@@ -12,13 +12,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from asset_info import MultipleCollect
-from models import ServerAsset, IdcAsset
+from .asset_info import MultipleCollect
+from .models import ServerAsset, IdcAsset
 from deploy.models import SaltHost
-from geo import GeoInput
+from .geo import GeoInput
 from asset.forms import IdcAssetForm
 
-import StringIO
+from io import StringIO
 import xlwt
 import json
 

@@ -147,3 +147,9 @@ try:
     from settings_local import *
 except ImportError:
     pass
+
+SALT_API = {"url": "https://192.168.194.140:8000",
+            "user": "saltapi",
+            "password": "saltapi"
+            }
+

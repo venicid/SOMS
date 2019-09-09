@@ -8,7 +8,7 @@
 @desc:
 '''
 
-from models import Provinces, Cities, Areas
+from .models import Provinces, Cities, Areas
 
 def GeoInput():
     '''

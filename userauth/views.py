@@ -32,7 +32,7 @@ from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
 from django.conf import settings as djsettings
 
-from models import User, UserGroup
+from .models import User, UserGroup
 
 from deploy.models import SaltGroup
 from userperm.views import UserIP
@@ -64,8 +64,7 @@ def get_qrcode(skey, username, uid):
         img = qr.make_image()
         img.save(filepath + username + '.png')
         return True
-    except Exception, e:
-        print e
+    except Exception as  e:
         return False
 
 

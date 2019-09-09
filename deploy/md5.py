@@ -43,4 +43,3 @@ def md5sum(fname):
 
 if __name__ == "__main__":
     file_md5 = md5sum(sys.argv[1])
-    print file_md5

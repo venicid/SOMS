@@ -223,7 +223,9 @@
                 dataType: "json",
                 success: function (ret) {
                     $(".loading").hide();
+                    console.log(1111111111)
                     console.log(ret);
+
                     $.each(ret, function (i, item) {
                         let t = i.replace(".", "-");
                         if(item['retcode']===0 && item['success']===true)

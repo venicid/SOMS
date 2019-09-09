@@ -11,7 +11,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 
-from models import *
+from .models import *
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control',

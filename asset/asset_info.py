@@ -36,7 +36,7 @@ def GetAssetInfo(tgt):
     '''
     global asset_info
     info = {}
-    sapi = SaltAPI(url=settings.SALT_API['url'],username=settings.SALT_API['user'],password=settings.SALT_API['password'])
+    sapi = SaltAPI()
     ret = sapi.remote_server_info(tgt, 'grains.items')
     info['sn']=GetInfo(ret,'serialnumber')
     info['hostname']=GetInfo(ret,'fqdn')
